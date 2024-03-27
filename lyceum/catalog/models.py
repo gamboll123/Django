@@ -1,7 +1,6 @@
-import django.db
-
-from django.db import models
 from django.core.exceptions import ValidationError
+import django.db
+from django.db import models
 
 
 def perfect_validator(value):
@@ -24,7 +23,10 @@ class Tag(django.db.models.Model):
     )
 
     slug = django.db.models.SlugField(
-        "слаг", max_length=200, unique=True,)
+        "слаг",
+        max_length=200,
+        unique=True,
+    )
 
     def __str__(self):
         return self.name
@@ -48,21 +50,24 @@ class Category(django.db.models.Model):
         max_length=200,
         unique=True,
     )
-    weight = django.db.models.IntegerField(
-        "Вес", default=100, null=True, blank=True)
+    weight = django.db.models.IntegerField("Вес", default=100, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name_plural = "Категории"
+
+
 class Item(django.db.models.Model):
     is_published = django.db.models.BooleanField(
         "опубликовано",
         default=True,
     )
     tags = models.ManyToManyField(Tag, related_name="items", verbose_name="теги")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="категория")
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, verbose_name="категория"
+    )
     name = django.db.models.CharField("название", max_length=150)
     text = django.db.models.TextField("текст", validators=[perfect_validator])
 
